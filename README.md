@@ -8,6 +8,7 @@ https://github.com/jgraph/drawio-desktop
 
 https://www.mysql.com/fr/
 
+![diagrame de classe](documentation\diagrameDeClasses1.png)
 
 
 ## Sur votre terminal:

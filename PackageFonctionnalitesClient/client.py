@@ -32,7 +32,9 @@ def insertClient():
 
 def consulterProduits():
     queryConsulterProduit = f"SELECT * FROM produit"
-    self.cursor.execute(queryConsulterProduit)
+    listeProduits = self.cursor.execute(queryConsulterProduit)
+    print(listeProduits)
+    return listeProduits
 
 def selectionnerProduit(id):
     querySelecionnerProduit = f"SELECT id FROM produit WHERE id = '{id}'"
@@ -43,3 +45,4 @@ def selectionnerProduit(id):
 if __name__== "main":
     client1 = Client("root", "", "localhost", "ocpyzzas", "Jean-Baptiste", "Baillet", "jbbaillet@gmail.com", "avec56")
     client1.insertClient()
+    client1.consulterProduits()
