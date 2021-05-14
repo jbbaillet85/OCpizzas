@@ -75,7 +75,9 @@ COMMIT;
 START TRANSACTION;
 USE `ocpizzas`;
 INSERT INTO `ocpizzas`.`commande` (`status_id`, `client_id`, `date`, `montant`, `pizzeria_id`, `mode_paiement_id`)
-VALUES (1, 1, '2021/04/20', 60, 1, 1);
+VALUES
+(1, 1, '2021/04/20', 60, 1, 1),
+(2, 2, '2021/05/23', 30, 2, 1);
 COMMIT;
 
 - -----------------------------------------------------
