@@ -45,12 +45,12 @@ ENGINE = InnoDB;
 
 
 -- --------------------------------------------------
--- Table `ocpizzas`.`commande_status`
+-- Table `ocpizzas`.`commande_statut`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocpizzas`.`commande_status` (
-  `commande_status_id` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `ocpizzas`.`commande_statut` (
+  `commande_statut_id` INT NOT NULL AUTO_INCREMENT,
   `nom` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`commande_status_id`))
+  PRIMARY KEY (`commande_statut_id`))
 ENGINE = InnoDB;
 
 
@@ -82,7 +82,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ocpizzas`.`commande` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `status_id` INT NOT NULL,
+  `statut_id` INT NOT NULL,
   `client_id` INT NOT NULL,
   `date` DATE NOT NULL,
   `montant` DECIMAL(5,2) NOT NULL,
@@ -92,9 +92,9 @@ CREATE TABLE IF NOT EXISTS `ocpizzas`.`commande` (
   CONSTRAINT `client`
     FOREIGN KEY (`client_id`)
     REFERENCES `ocpizzas`.`client` (`client_id`),
-  CONSTRAINT `commande_status_id`
-    FOREIGN KEY (`status_id`)
-    REFERENCES `ocpizzas`.`commande_status` (`commande_status_id`),
+  CONSTRAINT `commande_statut_id`
+    FOREIGN KEY (`statut_id`)
+    REFERENCES `ocpizzas`.`commande_statut` (`commande_statut_id`),
   CONSTRAINT `pizzeria`
     FOREIGN KEY (`pizzeria_id`)
     REFERENCES `ocpizzas`.`pizzeria` (`id`),

@@ -35,19 +35,19 @@ COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `ocpizzas`.`commande_status`
+-- Data for table `ocpizzas`.`commande_statut`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `ocpizzas`;
-INSERT INTO `ocpizzas`.`commande_status` (`nom`) VALUES ('panier');
-INSERT INTO `ocpizzas`.`commande_status` (`nom`) VALUES ('panier validé');
-INSERT INTO `ocpizzas`.`commande_status` (`nom`) VALUES ('modifiée');
-INSERT INTO `ocpizzas`.`commande_status` (`nom`) VALUES ('validée');
-INSERT INTO `ocpizzas`.`commande_status` (`nom`) VALUES ('prête à être livrée');
-INSERT INTO `ocpizzas`.`commande_status` (`nom`) VALUES ('livrée');
-INSERT INTO `ocpizzas`.`commande_status` (`nom`) VALUES ('payée');
-INSERT INTO `ocpizzas`.`commande_status` (`nom`) VALUES ('annulée');
-INSERT INTO `ocpizzas`.`commande_status` (`nom`) VALUES ('clôturée');
+INSERT INTO `ocpizzas`.`commande_statut` (`nom`) VALUES ('panier');
+INSERT INTO `ocpizzas`.`commande_statut` (`nom`) VALUES ('panier validé');
+INSERT INTO `ocpizzas`.`commande_statut` (`nom`) VALUES ('modifiée');
+INSERT INTO `ocpizzas`.`commande_statut` (`nom`) VALUES ('validée');
+INSERT INTO `ocpizzas`.`commande_statut` (`nom`) VALUES ('prête à être livrée');
+INSERT INTO `ocpizzas`.`commande_statut` (`nom`) VALUES ('livrée');
+INSERT INTO `ocpizzas`.`commande_statut` (`nom`) VALUES ('payée');
+INSERT INTO `ocpizzas`.`commande_statut` (`nom`) VALUES ('annulée');
+INSERT INTO `ocpizzas`.`commande_statut` (`nom`) VALUES ('clôturée');
 COMMIT;
 
 -- -----------------------------------------------------
@@ -74,7 +74,7 @@ COMMIT;
 -----------------------------------------------------
 START TRANSACTION;
 USE `ocpizzas`;
-INSERT INTO `ocpizzas`.`commande` (`status_id`, `client_id`, `date`, `montant`, `pizzeria_id`, `mode_paiement_id`)
+INSERT INTO `ocpizzas`.`commande` (`statut_id`, `client_id`, `date`, `montant`, `pizzeria_id`, `mode_paiement_id`)
 VALUES
 (1, 1, '2021/04/20', 60, 1, 1),
 (2, 2, '2021/05/23', 30, 2, 1);
@@ -233,7 +233,7 @@ INSERT INTO `ocpizzas`.`permission` (`nom`) VALUES ('preparer_commande');
 INSERT INTO `ocpizzas`.`permission` (`nom`) VALUES ('livrer_commande');
 INSERT INTO `ocpizzas`.`permission` (`nom`) VALUES ('consulter_stock_ingredient');
 INSERT INTO `ocpizzas`.`permission` (`nom`) VALUES ('consulter_aide_memoire');
-INSERT INTO `ocpizzas`.`permission` (`nom`) VALUES ('consulter_status_commandes');
+INSERT INTO `ocpizzas`.`permission` (`nom`) VALUES ('consulter_statut_commandes');
 COMMIT;
 
 
