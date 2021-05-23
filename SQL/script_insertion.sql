@@ -203,13 +203,13 @@ INSERT INTO `ocpizzas`.`ligne_commande` (`produit_id`, `commande_id`) VALUES (2,
 COMMIT;
 
 - -----------------------------------------------------
---Data for table `ocpizzas`.`profile`
+--Data for table `ocpizzas`.`profil`
 -----------------------------------------------------
 START TRANSACTION;
 USE `ocpizzas`;
-INSERT INTO `ocpizzas`.`profile` (`nom`) VALUES ('pizzaiolo');
-INSERT INTO `ocpizzas`.`profile` (`nom`) VALUES ('responsable');
-INSERT INTO `ocpizzas`.`profile` (`nom`) VALUES ('livreur');
+INSERT INTO `ocpizzas`.`profil` (`nom`) VALUES ('pizzaiolo');
+INSERT INTO `ocpizzas`.`profil` (`nom`) VALUES ('responsable');
+INSERT INTO `ocpizzas`.`profil` (`nom`) VALUES ('livreur');
 COMMIT;
 
 
@@ -218,9 +218,9 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `ocpizzas`;
-INSERT INTO `ocpizzas`.`employe` (`utilisateur_id`,`profile_employe_id`) VALUES (4, 1);
-INSERT INTO `ocpizzas`.`employe` (`utilisateur_id`,`profile_employe_id`) VALUES (5, 2);
-INSERT INTO `ocpizzas`.`employe` (`utilisateur_id`,`profile_employe_id`) VALUES (6, 3);
+INSERT INTO `ocpizzas`.`employe` (`utilisateur_id`,`profil_employe_id`) VALUES (4, 1);
+INSERT INTO `ocpizzas`.`employe` (`utilisateur_id`,`profil_employe_id`) VALUES (5, 2);
+INSERT INTO `ocpizzas`.`employe` (`utilisateur_id`,`profil_employe_id`) VALUES (6, 3);
 COMMIT;
 
 
@@ -238,13 +238,13 @@ COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `ocpizzas`.`profile_permission`
+-- Data for table `ocpizzas`.`profil_permission`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `ocpizzas`;
-INSERT INTO `ocpizzas`.`profile_permission` (`profile_id`, `permission_id`) VALUES (1,1);
-INSERT INTO `ocpizzas`.`profile_permission` (`profile_id`, `permission_id`) VALUES (2, 2);
-INSERT INTO `ocpizzas`.`profile_permission` (`profile_id`, `permission_id`) VALUES (3, 3);
-INSERT INTO `ocpizzas`.`profile_permission` (`profile_id`, `permission_id`) VALUES (1, 4);
-INSERT INTO `ocpizzas`.`profile_permission` (`profile_id`, `permission_id`) VALUES (3, 5);
+INSERT INTO `ocpizzas`.`profil_permission` (`profil_id`, `permission_id`) VALUES (1,1);
+INSERT INTO `ocpizzas`.`profil_permission` (`profil_id`, `permission_id`) VALUES (2, 2);
+INSERT INTO `ocpizzas`.`profil_permission` (`profil_id`, `permission_id`) VALUES (3, 3);
+INSERT INTO `ocpizzas`.`profil_permission` (`profil_id`, `permission_id`) VALUES (1, 4);
+INSERT INTO `ocpizzas`.`profil_permission` (`profil_id`, `permission_id`) VALUES (3, 5);
 COMMIT;

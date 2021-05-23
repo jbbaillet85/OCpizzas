@@ -175,9 +175,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ocpizzas`.`profile`
+-- Table `ocpizzas`.`profil`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocpizzas`.`profile` (
+CREATE TABLE IF NOT EXISTS `ocpizzas`.`profil` (
   `profil_id` INT NOT NULL AUTO_INCREMENT,
   `nom` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`profil_id`))
@@ -189,14 +189,14 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ocpizzas`.`employe` (
   `utilisateur_id` INT NOT NULL AUTO_INCREMENT,
-  `profile_employe_id` INT NOT NULL,
+  `profil_employe_id` INT NOT NULL,
   PRIMARY KEY (`utilisateur_id`),
   CONSTRAINT `utilisateur_id`
     FOREIGN KEY (`utilisateur_id`)
     REFERENCES `ocpizzas`.`utilisateur` (`utilisateur_id`),
-  CONSTRAINT `profile_employe_id`
-    FOREIGN KEY (`profile_employe_id`)
-    REFERENCES `ocpizzas`.`profile` (`profil_id`))
+  CONSTRAINT `profil_employe_id`
+    FOREIGN KEY (`profil_employe_id`)
+    REFERENCES `ocpizzas`.`profil` (`profil_id`))
 ENGINE = InnoDB;
 
 
@@ -211,14 +211,14 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ocpizzas`.`profile_permission`
+-- Table `ocpizzas`.`profil_permission`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocpizzas`.`profile_permission` (
-  `profile_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `ocpizzas`.`profil_permission` (
+  `profil_id` INT NOT NULL,
   `permission_id` INT NOT NULL,
-  CONSTRAINT `profile_id`
-    FOREIGN KEY (`profile_id`)
-    REFERENCES `ocpizzas`.`profile` (`profil_id`),
+  CONSTRAINT `profil_id`
+    FOREIGN KEY (`profil_id`)
+    REFERENCES `ocpizzas`.`profil` (`profil_id`),
   CONSTRAINT `permission_id`
     FOREIGN KEY (`permission_id`)
     REFERENCES `ocpizzas`.`permission` (`permission_id`))
