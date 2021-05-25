@@ -1,8 +1,28 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema ocpizzas
+-- -----------------------------------------------------
+
 -- -----------------------------------------------------
 -- Schema ocpizzas
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `ocpizzas` DEFAULT CHARACTER SET utf8 ;
 USE `ocpizzas` ;
+
+-- -----------------------------------------------------
+-- Table `ocpizzas`.`commande_statut`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ocpizzas`.`commande_statut` (
+  `commande_statut_id` INT NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`commande_statut_id`))
+ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table `ocpizzas`.`adresse`
@@ -17,44 +37,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ocpizzas`.`utilisateur`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocpizzas`.`utilisateur` (
-  `utilisateur_id` INT NOT NULL AUTO_INCREMENT,
-  `nom` VARCHAR(45) NOT NULL,
-  `prenom` VARCHAR(45) NOT NULL,
-  `courriel` VARCHAR(45) NOT NULL,
-  `password_hash` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`utilisateur_id`))
-ENGINE = InnoDB;
-
--- --------------------------------------------------
--- Table `ocpizzas`.`client`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocpizzas`.`client` (
-  `client_id` INT NOT NULL,
-  `adresse_client_id` INT NOT NULL,
-  PRIMARY KEY (`client_id`),
-  CONSTRAINT `adresse`
-    FOREIGN KEY (`adresse_client_id`)
-    REFERENCES `ocpizzas`.`adresse` (`adresse_id`),
-  CONSTRAINT `client_utilisateur_id`
-    FOREIGN KEY (`client_id`)
-    REFERENCES `ocpizzas`.`utilisateur` (`utilisateur_id`))
-ENGINE = InnoDB;
-
-
--- --------------------------------------------------
--- Table `ocpizzas`.`commande_statut`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocpizzas`.`commande_statut` (
-  `commande_statut_id` INT NOT NULL AUTO_INCREMENT,
-  `nom` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`commande_statut_id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `ocpizzas`.`pizzeria`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ocpizzas`.`pizzeria` (
@@ -64,7 +46,9 @@ CREATE TABLE IF NOT EXISTS `ocpizzas`.`pizzeria` (
   PRIMARY KEY (`id`),
   CONSTRAINT `adresse_id`
     FOREIGN KEY (`adresse_pizzerias_id`)
-    REFERENCES `ocpizzas`.`adresse` (`adresse_id`))
+    REFERENCES `ocpizzas`.`adresse` (`adresse_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -76,6 +60,42 @@ CREATE TABLE IF NOT EXISTS `ocpizzas`.`paiement` (
   `nom` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`paiement_id`))
 ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ocpizzas`.`profil`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ocpizzas`.`profil` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ocpizzas`.`utilisateur`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ocpizzas`.`utilisateur` (
+  `utilisateur_id` INT NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(45) NOT NULL,
+  `prenom` VARCHAR(45) NOT NULL,
+  `courriel` VARCHAR(45) NOT NULL,
+  `password_hash` VARCHAR(45) NOT NULL,
+  `utilisateur_adresse` INT NULL,
+  `utilisateur_profil` INT NULL,
+  PRIMARY KEY (`utilisateur_id`),
+  CONSTRAINT `utilisateur_adresse`
+    FOREIGN KEY (`utilisateur_adresse`)
+    REFERENCES `ocpizzas`.`adresse` (`adresse_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `utilisateur_profil`
+    FOREIGN KEY (`utilisateur_profil`)
+    REFERENCES `ocpizzas`.`profil` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table `ocpizzas`.`commande`
@@ -89,18 +109,26 @@ CREATE TABLE IF NOT EXISTS `ocpizzas`.`commande` (
   `pizzeria_id` INT NOT NULL,
   `mode_paiement_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `client`
-    FOREIGN KEY (`client_id`)
-    REFERENCES `ocpizzas`.`client` (`client_id`),
-  CONSTRAINT `commande_statut_id`
+  CONSTRAINT `commande_status_id`
     FOREIGN KEY (`statut_id`)
-    REFERENCES `ocpizzas`.`commande_statut` (`commande_statut_id`),
+    REFERENCES `ocpizzas`.`commande_statut` (`commande_statut_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `pizzeria`
     FOREIGN KEY (`pizzeria_id`)
-    REFERENCES `ocpizzas`.`pizzeria` (`id`),
+    REFERENCES `ocpizzas`.`pizzeria` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `mode_paiement`
     FOREIGN KEY (`mode_paiement_id`)
-    REFERENCES `ocpizzas`.`paiement` (`paiement_id`))
+    REFERENCES `ocpizzas`.`paiement` (`paiement_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `utilisateur_commande_id`
+    FOREIGN KEY (`id`)
+    REFERENCES `ocpizzas`.`utilisateur` (`utilisateur_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -136,12 +164,15 @@ CREATE TABLE IF NOT EXISTS `ocpizzas`.`stock_ingredient` (
   PRIMARY KEY (`pizzeria_id`, `ingredient_id`),
   CONSTRAINT `stock_pizzeria`
     FOREIGN KEY (`pizzeria_id`)
-    REFERENCES `ocpizzas`.`pizzeria` (`id`),
+    REFERENCES `ocpizzas`.`pizzeria` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
   CONSTRAINT `stock_ingredient`
     FOREIGN KEY (`ingredient_id`)
-    REFERENCES `ocpizzas`.`ingredient` (`id`))
+    REFERENCES `ocpizzas`.`ingredient` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
 
 
 -- -----------------------------------------------------
@@ -153,11 +184,16 @@ CREATE TABLE IF NOT EXISTS `ocpizzas`.`aide_memoire` (
   `quantite` INT NOT NULL,
   CONSTRAINT `produit_id`
     FOREIGN KEY (`produit_id`)
-    REFERENCES `ocpizzas`.`produit` (`id`),
+    REFERENCES `ocpizzas`.`produit` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `ingredient_id`
     FOREIGN KEY (`ingredient_id`)
-    REFERENCES `ocpizzas`.`ingredient` (`id`))
+    REFERENCES `ocpizzas`.`ingredient` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table `ocpizzas`.`ligne_commande`
@@ -167,36 +203,14 @@ CREATE TABLE IF NOT EXISTS `ocpizzas`.`ligne_commande` (
   `commande_id` INT NOT NULL,
   CONSTRAINT `pizzas`
     FOREIGN KEY (`produit_id`)
-    REFERENCES `ocpizzas`.`produit` (`id`),
+    REFERENCES `ocpizzas`.`produit` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
   CONSTRAINT `idCommande`
     FOREIGN KEY (`commande_id`)
-    REFERENCES `ocpizzas`.`commande` (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `ocpizzas`.`profil`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocpizzas`.`profil` (
-  `profil_id` INT NOT NULL AUTO_INCREMENT,
-  `nom` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`profil_id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `ocpizzas`.`employe`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocpizzas`.`employe` (
-  `utilisateur_id` INT NOT NULL AUTO_INCREMENT,
-  `profil_employe_id` INT NOT NULL,
-  PRIMARY KEY (`utilisateur_id`),
-  CONSTRAINT `utilisateur_id`
-    FOREIGN KEY (`utilisateur_id`)
-    REFERENCES `ocpizzas`.`utilisateur` (`utilisateur_id`),
-  CONSTRAINT `profil_employe_id`
-    FOREIGN KEY (`profil_employe_id`)
-    REFERENCES `ocpizzas`.`profil` (`profil_id`))
+    REFERENCES `ocpizzas`.`commande` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -204,9 +218,9 @@ ENGINE = InnoDB;
 -- Table `ocpizzas`.`permission`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ocpizzas`.`permission` (
-  `permission_id` INT NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `nom` VARCHAR(200) NOT NULL,
-  PRIMARY KEY (`permission_id`))
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
@@ -214,13 +228,21 @@ ENGINE = InnoDB;
 -- Table `ocpizzas`.`profil_permission`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ocpizzas`.`profil_permission` (
-  `profil_id` INT NOT NULL,
-  `permission_id` INT NOT NULL,
-  CONSTRAINT `profil_id`
-    FOREIGN KEY (`profil_id`)
-    REFERENCES `ocpizzas`.`profil` (`profil_id`),
+  `profil` INT NOT NULL,
+  `permission` INT NOT NULL,
+  CONSTRAINT `profile_id`
+    FOREIGN KEY (`profil`)
+    REFERENCES `ocpizzas`.`profil` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
   CONSTRAINT `permission_id`
-    FOREIGN KEY (`permission_id`)
-    REFERENCES `ocpizzas`.`permission` (`permission_id`))
+    FOREIGN KEY (`permission`)
+    REFERENCES `ocpizzas`.`permission` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
